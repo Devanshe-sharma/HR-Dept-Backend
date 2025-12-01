@@ -2,16 +2,10 @@
 Django settings for hr_backend project.
 """
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-STATIC_URL = '/static/'
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-r@a-yph&mjqcjt1^$#%^$7x0dj$jo9ebx4dt$)f@^&7s47=k%n'
@@ -31,14 +25,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'corsheaders',      # ← ONLY ONCE
+    'corsheaders',
     'hiring',
     'import_export',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',   # ← MUST BE FIRST
+    'corsheaders.middleware.CorsMiddleware',   # must be first
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # whitenoise after security
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,7 +47,7 @@ ROOT_URLCONF = 'hr_backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "hr_backend/templates"],   # ← add this
+        'DIRS': [BASE_DIR / "hr_backend" / "templates"],   # custom templates folder
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,7 +58,6 @@ TEMPLATES = [
         },
     },
 ]
-
 
 WSGI_APPLICATION = 'hr_backend.wsgi.application'
 
@@ -89,13 +83,19 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# CORS — THIS FIXES EVERYTHING
-CORS_ALLOW_ALL_ORIGINS = True   # Allows localhost:5173 and everything in dev
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True   # allows localhost:5173 and other dev origins
 
 # Static files
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+# Extra static files (React build, images, etc.)
+STATICFILES_DIRS = [
+    BASE_DIR / "hr_backend" / "static"
+]
+
+# Where collectstatic will put all files for production
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-STATICFILES_DIRS = [BASE_DIR / "hr_backend/static"]
