@@ -1,6 +1,9 @@
 """
 Django settings for hr_backend project.
 """
+
+print(f"DEBUG: ALLOWED_HOSTS = {ALLOWED_HOSTS}")
+
 import os
 from pathlib import Path
 
@@ -13,7 +16,6 @@ SECRET_KEY = 'django-insecure-r@a-yph&mjqcjt1^$#%^$7x0dj$jo9ebx4dt$)f@^&7s47=k%n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
 INSTALLED_APPS = [
@@ -102,3 +104,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800  
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
+
+ALLOWED_HOSTS = ['devanshehsharma.pythonanywhere.com', 'localhost', '127.0.0.1']
+
