@@ -2,7 +2,6 @@
 Django settings for hr_backend project.
 """
 
-print(f"DEBUG: ALLOWED_HOSTS = {ALLOWED_HOSTS}")
 
 import os
 from pathlib import Path
@@ -106,4 +105,6 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
 FILE_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
 ALLOWED_HOSTS = ['devanshehsharma.pythonanywhere.com', 'localhost', '127.0.0.1']
+
+print(f"DEBUG: ALLOWED_HOSTS = {ALLOWED_HOSTS}")
 
