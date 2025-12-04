@@ -1,23 +1,28 @@
 # hiring/views.py  ← FINAL BULLETPROOF VERSION
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
 from django.db.models import Max
 from .models import Department, Employee, Designation, HiringRequisition
 import json
 
+
+@require_GET
 def next_serial(request):
     last = HiringRequisition.objects.aggregate(Max('serial_no'))['serial_no__max']
     next_num = (last or 1000) + 1
     return JsonResponse({'nextSerial': next_num})
 
+@require_GET
 def get_departments(request):
     depts = list(Department.objects.values('id', 'name'))
     return JsonResponse(depts, safe=False)
 
+@require_GET
 def get_employees(request):
     emps = list(Employee.objects.values('id', 'name', 'email'))
     return JsonResponse(emps, safe=False)
 
+@require_GET
 def all_designations(request):
     designations = Designation.objects.all()
     data = [
@@ -57,4 +62,8 @@ def submit_requisition(request):
             jd_link=data.get("jd_link"),       # ✅ save jd link
         )
 
-        return JsonResponse({"success": True, "id": req.id})
+        return JsonResponse({
+                "success": True,
+                "id": req.id,
+                "serial_no": req.serial_no
+            })
