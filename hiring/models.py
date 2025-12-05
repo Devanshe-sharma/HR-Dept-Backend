@@ -1,6 +1,7 @@
 # hiring/models.py
 from django.db import models
 
+
 class Department(models.Model):
     name = models.CharField(max_length=150)  # maps to "Department"
     page_link = models.URLField(blank=True, null=True)    # maps to "Dept Page Link (BO Internal Site)"
@@ -27,17 +28,14 @@ class Designation(models.Model):
         return self.name
 
 
-
-
-
-
 class Employee(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
 
 
 class HiringRequisition(models.Model):
@@ -45,20 +43,19 @@ class HiringRequisition(models.Model):
 
     # Foreign keys — allow null/blank so existing rows don’t break
     requisitioner = models.ForeignKey(
-        Employee,
+        'Employee',   # ← string reference
         on_delete=models.CASCADE,
         related_name='requisitions',
         null=True,
         blank=True
     )
     hiring_dept = models.ForeignKey(
-        Department,
+        'Department', # ← also string reference
         on_delete=models.CASCADE,
         related_name='requisitions',
         null=True,
         blank=True
     )
-
     # Core fields with defaults
     designation_status = models.CharField(max_length=50, default='Existing Designation')
     hiring_designation = models.CharField(max_length=150, blank=True, default='')

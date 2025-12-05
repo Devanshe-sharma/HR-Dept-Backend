@@ -19,9 +19,9 @@ def get_departments(request):
     return JsonResponse(depts, safe=False)
 
 @require_GET
-def get_employees(request):
-    emps = list(Employee.objects.values('id', 'name', 'email'))
-    return JsonResponse(emps, safe=False)
+def employees(request):
+    data = list(Employee.objects.values("name", "email"))  # ← Only Name & Official Email
+    return JsonResponse(data, safe=False)
 
 @require_GET
 def all_designations(request):
