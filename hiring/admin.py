@@ -1,11 +1,11 @@
-# hiring/admin.py
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 from .models import Department, Designation, Employee, HiringRequisition
-from import_export import resources, fields
+from import_export import fields
 from import_export.widgets import ForeignKeyWidget
 
+# --- Resources for import/export ---
 class DepartmentResource(resources.ModelResource):
     class Meta:
         model = Department
@@ -22,20 +22,19 @@ class DepartmentResource(resources.ModelResource):
         import_id_fields = ('name',)
 
 
-
 class DesignationResource(resources.ModelResource):
     class Meta:
         model = Designation
         fields = (
             'id',
             'name',
+            'department',
             'role_document_link',
             'jd_link',
             'remarks',
             'role_document',
         )
         import_id_fields = ('name',)
-
 
 
 class EmployeeResource(resources.ModelResource):
@@ -65,17 +64,19 @@ class HiringRequisitionResource(resources.ModelResource):
         )
 
 
+# --- Admin registrations ---
 @admin.register(Department)
 class DepartmentAdmin(ImportExportModelAdmin):
     resource_class = DepartmentResource
-    list_display = ('id', 'name')
-    search_fields = ('name',)
+    list_display = ('name', 'department_type', 'head_email', 'group_email', 'page_link')
+    search_fields = ('name', 'head_email', 'group_email')
+    list_filter = ('department_type',)
 
 
 @admin.register(Designation)
 class DesignationAdmin(ImportExportModelAdmin):
     resource_class = DesignationResource
-    list_display = ('id', 'name', 'department', 'jd_link', 'role_document_link')
+    list_display = ('name', 'department', 'jd_link', 'role_document_link', 'remarks')
     list_filter = ('department',)
     search_fields = ('name', 'remarks')
 
@@ -83,7 +84,7 @@ class DesignationAdmin(ImportExportModelAdmin):
 @admin.register(Employee)
 class EmployeeAdmin(ImportExportModelAdmin):
     resource_class = EmployeeResource
-    list_display = ('id', 'name', 'email', 'department')
+    list_display = ('name', 'email', 'department')
     list_filter = ('department',)
     search_fields = ('name', 'email')
 
@@ -96,9 +97,12 @@ class HiringRequisitionAdmin(ImportExportModelAdmin):
         'requisitioner',
         'hiring_dept',
         'designation_status',
+        'hiring_designation',
+        'new_designation',
         'joining_days',
         'hiring_status',
+        'special_instructions',
     )
     list_filter = ('hiring_dept', 'designation_status', 'hiring_status')
-    search_fields = ('serial_no', 'hiring_designation', 'new_designation')
+    search_fields = ('serial_no', 'hiring_designation', 'new_designation', 'special_instructions')
     ordering = ('-serial_no',)
