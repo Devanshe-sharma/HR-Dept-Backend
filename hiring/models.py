@@ -28,10 +28,6 @@ class Designation(models.Model):
         return self.name
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 75d321de6b83703a21bb264b866651beb3e2fbf0
 class Employee(models.Model):
     name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
