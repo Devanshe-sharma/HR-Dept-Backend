@@ -44,9 +44,9 @@ class Designation(models.Model):
 
 
 class Employee(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         verbose_name = "Employee"
@@ -54,6 +54,7 @@ class Employee(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.email})"
+
 
 
 class HiringRequisition(models.Model):
@@ -71,19 +72,20 @@ class HiringRequisition(models.Model):
     serial_no = models.IntegerField(unique=True, blank=True, null=True)
 
     requisitioner = models.ForeignKey(
-        Employee,
+        'Employee',   # ← string reference
         on_delete=models.CASCADE,
         related_name="requisitions",
         null=True,
         blank=True
     )
     hiring_dept = models.ForeignKey(
-        Department,
+        'Department', # ← also string reference
         on_delete=models.CASCADE,
         related_name="requisitions",
         null=True,
         blank=True
     )
+<<<<<<< HEAD
 
     designation_status = models.CharField(
         max_length=50,
@@ -95,6 +97,15 @@ class HiringRequisition(models.Model):
     joining_days = models.CharField(max_length=50, blank=True, default="30 Days")
     special_instructions = models.TextField(blank=True, default="")
     hiring_status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Open")
+=======
+    # Core fields with defaults
+    designation_status = models.CharField(max_length=50, default='Existing Designation')
+    hiring_designation = models.CharField(max_length=150, blank=True, default='')
+    new_designation = models.CharField(max_length=150, blank=True, default='')
+    joining_days = models.CharField(max_length=50, blank=True, default='30 Days')
+    special_instructions = models.TextField(blank=True, default='')
+    hiring_status = models.CharField(max_length=20, default='Open')
+>>>>>>> efb8b168839e17d03af68bd62903968b205f9ea6
     role_link = models.URLField(blank=True, null=True)
     jd_link = models.URLField(blank=True, null=True)
 
