@@ -1,11 +1,19 @@
 from django.contrib import admin
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from .models import Department, Designation, Employee, HiringRequisition
-from import_export import fields
-from import_export.widgets import ForeignKeyWidget
+from .models import (
+    Department,
+    Designation,
+    Employee,
+    HiringRequisition,
+    CandidateApplication,
+    Onboarding,
+    OnboardingUpdate,
+)
 
-# --- Resources for import/export ---
+# -------------------------
+# Resources for import/export
+# -------------------------
 class DepartmentResource(resources.ModelResource):
     class Meta:
         model = Department
@@ -64,7 +72,50 @@ class HiringRequisitionResource(resources.ModelResource):
         )
 
 
-# --- Admin registrations ---
+class CandidateApplicationResource(resources.ModelResource):
+    class Meta:
+        model = CandidateApplication
+        fields = (
+            'id',
+            'name',
+            'email',
+            'applied_position',
+            'resume_link',
+            'status',
+            'applied_at',
+            'requisition',
+        )
+
+
+class OnboardingResource(resources.ModelResource):
+    class Meta:
+        model = Onboarding
+        fields = (
+            'id',
+            'candidate',
+            'start_date',
+            'onboarding_steps',
+            'buddy',
+            'status',
+            'created_at',
+        )
+
+
+class OnboardingUpdateResource(resources.ModelResource):
+    class Meta:
+        model = OnboardingUpdate
+        fields = (
+            'id',
+            'onboarding',
+            'updated_by',
+            'notes',
+            'updated_at',
+        )
+
+
+# -------------------------
+# Admin registrations
+# -------------------------
 @admin.register(Department)
 class DepartmentAdmin(ImportExportModelAdmin):
     resource_class = DepartmentResource
@@ -106,3 +157,27 @@ class HiringRequisitionAdmin(ImportExportModelAdmin):
     list_filter = ('hiring_dept', 'designation_status', 'hiring_status')
     search_fields = ('serial_no', 'hiring_designation', 'new_designation', 'special_instructions')
     ordering = ('-serial_no',)
+
+
+@admin.register(CandidateApplication)
+class CandidateApplicationAdmin(ImportExportModelAdmin):
+    resource_class = CandidateApplicationResource
+    list_display = ('name', 'email', 'applied_position', 'status', 'applied_at', 'requisition')
+    search_fields = ('name', 'email', 'applied_position')
+    list_filter = ('status', 'requisition')
+
+
+@admin.register(Onboarding)
+class OnboardingAdmin(ImportExportModelAdmin):
+    resource_class = OnboardingResource
+    list_display = ('candidate', 'start_date', 'buddy', 'status', 'created_at')
+    search_fields = ('candidate__name', 'candidate__email', 'buddy__name')
+    list_filter = ('status',)
+
+
+@admin.register(OnboardingUpdate)
+class OnboardingUpdateAdmin(ImportExportModelAdmin):
+    resource_class = OnboardingUpdateResource
+    list_display = ('onboarding', 'updated_by', 'updated_at')
+    search_fields = ('onboarding__candidate__name', 'updated_by__name')
+    list_filter = ('updated_by',)

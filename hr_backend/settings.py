@@ -10,7 +10,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-r@a-yph&mjqcjt1^$#%^$7x0dj$jo9ebx4dt$)f@^&7s47=k%n'
 DEBUG = True
 
-ALLOWED_HOSTS = ['devanshehsharma.pythonanywhere.com', 'localhost', '127.0.0.1', '127.0.0.1:8000']
+ALLOWED_HOSTS = [
+    'devanshehsharma.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -80,7 +84,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://devanshehsharma.pythonanywhere.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
 
 # Static files
 STATIC_URL = '/static/'
